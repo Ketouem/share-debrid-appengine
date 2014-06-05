@@ -4,6 +4,8 @@ import urllib
 import hashlib
 import json
 
+from controller.exceptions import NotConnectedError
+
 
 class ServiceConnector:
 
@@ -52,12 +54,6 @@ class ServiceConnector:
     @password.setter
     def password(self, value):
         self._password = value
-
-
-class NotConnectedError(Exception):
-
-    def __init__(self):
-        pass
 
 
 class RealDebridServiceConnector(ServiceConnector):
