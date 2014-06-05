@@ -1,4 +1,4 @@
 class NotConnectedError(Exception):
 
-    def __init__(self):
-        pass
+    def __init__(self, message):
+        self._message = message

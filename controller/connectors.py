@@ -81,12 +81,12 @@ class RealDebridServiceConnector(ServiceConnector):
     def unlock_link(self, url):
         """Unrestrict a file locker link given its url
 
-        :param url: The url of the file locker you want to unrestrict
+        :param url: The url of the file locker you want to un-restrict
         :type url: str
         :return: the unlocked url
         """
         if self._auth_cookie is None:
-            raise NotConnectedError()
+            raise NotConnectedError('No auth cookie is available.')
         else:
             api_url = self._endpoint + '/unrestrict.php?link={}'.format(url)
             opener = urllib2.build_opener()
