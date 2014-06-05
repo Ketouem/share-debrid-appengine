@@ -16,8 +16,9 @@
 #
 import webapp2
 
-from controller.server import DebridPage
+from controller.server import MainPage, Unrestrictor
 
 app = webapp2.WSGIApplication([
-    ('/', DebridPage)
+    ('/', MainPage),
+    ('/unrestrict', Unrestrictor)
 ], debug=True)

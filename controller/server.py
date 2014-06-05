@@ -1,3 +1,5 @@
+import json
+
 from google.appengine.api import users
 
 import webapp2
@@ -5,7 +7,7 @@ import webapp2
 from environment import JINJA_ENVIRONMENT
 
 
-class DebridPage(webapp2.RedirectHandler):
+class MainPage(webapp2.RedirectHandler):
 
     def get(self):
         user = users.get_current_user()
@@ -16,3 +18,10 @@ class DebridPage(webapp2.RedirectHandler):
             self.response.write(template.render())
         else:
             self.redirect(users.create_login_url(self.request.uri))
+
+
+class Unrestrictor(webapp2.RedirectHandler):
+
+    def post(self):
+        self.response.headers['Content-Type'] = 'text/plain'
+        self.response.write('Hello, World!')

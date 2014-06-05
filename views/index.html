@@ -6,17 +6,20 @@
         <!-- css -->
         <link rel="stylesheet" href="/css/bootstrap.css">
         <script>
-            function unrestrict(url){
-                $.ajax({
-                    type: "POST",
-                    url: "/unrestrict",
-                    dataType: "json",
-                    data: JSON.stringify({"sourceUrl": url})
-                })
-                .done(function(data){
-                   alert("Finished ! " + data.toString());
+            $(document).ready(function(){
+                $("#formulaire").submit(function(){
+                    $.ajax({type:"POST", data: $(this).serialize(), url:"post.php",
+                        success: function(data){
+                            $("#post").html(data);
+                        },
+                        error: function(){
+                            $("#post").html('Une erreur est survenue.');
+                        }
+                    });
+                    return false;
                 });
-            }
+            });
+
         </script>
     </head>
     <body>
@@ -30,13 +33,13 @@
             </div>
             <div class="row">
                 <div class="span6">
-                    <form role="form">
+                    <form role="form" id="mainForm" method="POST" action="/unrestrict">
                         <div class="form-group">
                             <label for="inputSourceUrl">Source url</label>
                             <input type="url" class="form-control" id="inputSourceUrl"
                                    placeholder="http://rapidshare.com/file/lol.avi">
                         </div>
-                        <button type="submit" class="btn btn-primary">Un-restrict</button>
+                        <input type="submit" class="btn btn-primary" value="Un-restrict">
                     </form>
                 </div>
                 <div class="span6">
