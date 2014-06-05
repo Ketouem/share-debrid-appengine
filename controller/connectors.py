@@ -24,10 +24,6 @@ class ServiceConnector:
         pass
 
     @abstractmethod
-    def close(self):
-        pass
-
-    @abstractmethod
     def is_connected(self):
         pass
 
@@ -69,7 +65,7 @@ class RealDebridServiceConnector(ServiceConnector):
         ServiceConnector.__init__(self, user, password)
         self._auth_cookie = None
 
-    def login(self):
+    def connect(self):
         """Start a connection with real-debrid's api
 
         """
@@ -98,3 +94,6 @@ class RealDebridServiceConnector(ServiceConnector):
             result = opener.open(api_url)
             response = json.loads(result.read())
             return response['main_link']
+
+    def is_connected(self):
+        return self._auth_cookie is not None
