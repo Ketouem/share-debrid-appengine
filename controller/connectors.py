@@ -3,8 +3,10 @@ import urllib2
 import urllib
 import hashlib
 import json
+from datetime import datetime
 
 from controller.exceptions import NotConnectedError
+from model.File import File
 
 
 class ServiceConnector:
@@ -85,7 +87,7 @@ class RealDebridServiceConnector(ServiceConnector):
 
         :param url: The url of the file locker you want to un-restrict
         :type url: str
-        :return: the unlocked url
+        :return: a model.File instance containing the unlocked url
         """
         if self._auth_cookie is None:
             raise NotConnectedError('No auth cookie is available.')
@@ -95,7 +97,10 @@ class RealDebridServiceConnector(ServiceConnector):
             opener.addheaders.append(('Cookie', self._auth_cookie))
             result = opener.open(api_url)
             response = json.loads(result.read())
-            return response['main_link']
+            f = File(source_url=url, unrestricted_url=response['main_link'], filename=response['file_name'],
+                     size=int(response['file_size_bytes']), file_locker=response['hoster_name'],
+                     creation_date=datetime.utcnow())
+            return f
 
     def is_connected(self):
         return self._auth_cookie is not None

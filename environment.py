@@ -6,7 +6,9 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
-REAL_DEBRID_CREDENTIALS= {
+REAL_DEBRID_CREDENTIALS = {
     'user': None,
     'password': None
 }
+
+FILE_STORE_LIMIT = 10
