@@ -16,9 +16,10 @@
 #
 import webapp2
 
-from controller.server import MainPage, Unrestrictor
+from controller.server import MainPage, Unrestrictor, Archiver
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/unrestrict', Unrestrictor)
+    ('/unrestrict', Unrestrictor),
+    ('/files', Archiver)
 ], debug=True)

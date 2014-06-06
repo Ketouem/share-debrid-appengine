@@ -28,6 +28,34 @@
                     })
                 });
             });
+            //What happens when the user fetches his history
+            $(document).ready(function(){
+                $("#previousLinks").click(function(){
+                    $.ajax({
+                        type: 'get',
+                        url: '/files',
+                        success: function(data){
+                            var parsed = $.parseJSON(data);
+                            $("#historyUnrestricted .list-group-item").remove();
+                            $("#historySource .list-group-item").remove();
+                            for(var i = 0; i < parsed.length; i++){
+                                var unrestrictedUrl = parsed[i]['unrestrictedUrl'];
+                                var sourceUrl = parsed[i]['sourceUrl'];
+                                $("#history .span12").prepend('<div class="navbar navbar-default" role="navigation">' +
+                                                      '<div class="navbar-inner">' +
+                                                      '<ul class="nav navbar-nav" id="historySource">' +
+                                                      '<li><a href="' + unrestrictedUrl + '">' +
+                                                      unrestrictedUrl + '</a></li>' +
+                                                      '<li><a href="' + sourceUrl + '">' +
+                                                      sourceUrl + '</a></li>' +
+                                                      '</ul>' +
+                                                      '</div>' +
+                                                      '</div>');
+                            }
+                        }
+                    })
+                })
+            });
         </script>
     </head>
     <body>
@@ -55,9 +83,13 @@
                     <a href="" id="unrestrictedUrl"></a>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="padding-bottom: 20px;">
                 <div class="span3">
-                    <button class="btn">Previous links</button>
+                    <button class="btn" id="previousLinks">Previous links</button>
+                </div>
+            </div>
+            <div class="row" id="history">
+                <div class="span12">
                 </div>
             </div>
         </div>

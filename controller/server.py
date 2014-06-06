@@ -51,7 +51,8 @@ class Archiver(webapp2.RedirectHandler):
             for f in files:
                 ret.append({
                     'unrestrictedUrl': f.unrestricted_url,
-                    'filename': f.filename
+                    'filename': f.filename,
+                    'sourceUrl': f.source_url
                 })
             self.response.write(json.dumps(ret))
         else:
