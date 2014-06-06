@@ -10,6 +10,7 @@
         <script src="/js/bootstrap.js"></script>
 
         <script>
+            // What happens when the user submits the form
             $(document).ready(function(){
                 $("#mainForm").submit(function(e){
                     e.preventDefault()
@@ -34,23 +35,29 @@
             <div class="navbar">
                 <div class="navbar-inner" style="background-image: -webkit-linear-gradient(top, rgb(255, 255, 255), rgb(242, 242, 242));">
                     <div class="container" style="width: auto;">
-                        <div class="brand">Share Debrid</div>
+                        <div class="brand">Share Debrid - User: {{user.nickname()}}</div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="span6">
+                <div class="span3">
                     <form role="form" id="mainForm" action="#">
                         <div class="form-group">
-                            <label for="inputSourceUrl">Source url</label>
+                            <label for="inputSourceUrl">Source URL: </label>
                             <input type="url" class="form-control" id="inputSourceUrl"
                                    placeholder="http://rapidshare.com/file/lol.avi">
                         </div>
                         <input type="submit" class="btn btn-primary" value="Un-restrict">
                     </form>
                 </div>
-                <div class="span6">
+                <div class="span9">
+                    <label for="unrestrictedUrl">Unrestricted URL:</label>
                     <a href="" id="unrestrictedUrl"></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span3">
+                    <button class="btn">Previous links</button>
                 </div>
             </div>
         </div>
