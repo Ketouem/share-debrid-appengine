@@ -4,7 +4,8 @@ from google.appengine.api import users
 
 import webapp2
 
-from environment import JINJA_ENVIRONMENT
+from controller.connectors import RealDebridServiceConnector
+from environment import JINJA_ENVIRONMENT, REAL_DEBRID_CREDENTIALS
 
 
 class MainPage(webapp2.RedirectHandler):
@@ -23,5 +24,11 @@ class MainPage(webapp2.RedirectHandler):
 class Unrestrictor(webapp2.RedirectHandler):
 
     def post(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.write('Hello, World!')
+        data = self.request.body
+        data = json.loads(data)
+        c = RealDebridServiceConnector(**REAL_DEBRID_CREDENTIALS)
+        f = c.unlock_link(data["url"])
+        ret = {
+            'unrestrictedUrl': f
+        }
+        self.response.write(json.dumps(ret))

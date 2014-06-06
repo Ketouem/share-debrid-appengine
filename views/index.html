@@ -5,21 +5,28 @@
         <title>Share Debrid</title>
         <!-- css -->
         <link rel="stylesheet" href="/css/bootstrap.css">
+        <!-- js -->
+        <script src="/js/jquery-1.11.1.min.js"></script>
+        <script src="/js/bootstrap.js"></script>
+
         <script>
             $(document).ready(function(){
-                $("#formulaire").submit(function(){
-                    $.ajax({type:"POST", data: $(this).serialize(), url:"post.php",
+                $("#mainForm").submit(function(e){
+                    e.preventDefault()
+                    var urlUnrestrict = $("#inputSourceUrl").val();
+                    $.ajax({
+                        type: 'post',
+                        url: '/unrestrict',
+                        data: JSON.stringify({'url': urlUnrestrict}),
+                        contentType: 'application/json',
                         success: function(data){
-                            $("#post").html(data);
-                        },
-                        error: function(){
-                            $("#post").html('Une erreur est survenue.');
+                            var parsed = $.parseJSON(data);
+                            $('#unrestrictedUrl').attr("href", parsed['unrestrictedUrl']);
+                            $('#unrestrictedUrl').text(parsed['unrestrictedUrl']);
                         }
-                    });
-                    return false;
+                    })
                 });
             });
-
         </script>
     </head>
     <body>
@@ -33,7 +40,7 @@
             </div>
             <div class="row">
                 <div class="span6">
-                    <form role="form" id="mainForm" method="POST" action="/unrestrict">
+                    <form role="form" id="mainForm" action="#">
                         <div class="form-group">
                             <label for="inputSourceUrl">Source url</label>
                             <input type="url" class="form-control" id="inputSourceUrl"
@@ -43,12 +50,10 @@
                     </form>
                 </div>
                 <div class="span6">
-                    <a href=""></a>
+                    <a href="" id="unrestrictedUrl"></a>
                 </div>
             </div>
         </div>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <script src="/js/bootstrap.js"></script>
     </body>
 </html>
 {% endautoescape %}

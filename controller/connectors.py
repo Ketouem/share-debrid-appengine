@@ -64,6 +64,8 @@ class RealDebridServiceConnector(ServiceConnector):
     def __init__(self, user, password):
         ServiceConnector.__init__(self, user, password)
         self._auth_cookie = None
+        if user is not None and password is not None:
+            self.connect()
 
     def connect(self):
         """Start a connection with real-debrid's api
