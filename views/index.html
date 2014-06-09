@@ -5,25 +5,48 @@
         <title>Share Debrid</title>
         <!-- css -->
         <link rel="stylesheet" href="/css/bootstrap.css">
+        <link rel="stylesheet" href="/css/boxes.css">
         <!-- js -->
         <script src="/js/jquery-1.11.1.min.js"></script>
         <script src="/js/bootstrap.js"></script>
 
         <script>
+            function cleanUnrestrictSpinner(){
+                //Detect the spinner
+                var spinner = $('#unrestrictedZone img');
+                if(spinner != null){
+                    spinner.remove();
+                }
+            }
+            function cleanSuccess(){
+                $('#unrestrictedUrl').attr('class', '');
+            }
             // What happens when the user submits the form
             $(document).ready(function(){
                 $("#mainForm").submit(function(e){
                     e.preventDefault()
                     var urlUnrestrict = $("#inputSourceUrl").val();
+                    //Setting the spinner
+                    $('#unrestrictedZone').append('<img src="/img/spinner.gif"/>');
+                    //Clean previous success
+                    cleanSuccess();
                     $.ajax({
                         type: 'post',
                         url: '/unrestrict',
                         data: JSON.stringify({'url': urlUnrestrict}),
                         contentType: 'application/json',
                         success: function(data){
+                            cleanUnrestrictSpinner();
                             var parsed = $.parseJSON(data);
-                            $('#unrestrictedUrl').attr("href", parsed['unrestrictedUrl']);
-                            $('#unrestrictedUrl').text(parsed['unrestrictedUrl']);
+                            var anchorSuccess = $('#unrestrictedUrl a');
+                            anchorSuccess.attr("href", parsed['unrestrictedUrl']);
+                            anchorSuccess.text(parsed['unrestrictedUrl']);
+                            $('#unrestrictedUrl').attr('class', 'alert alert-success');
+                        },
+                        error: function(){
+                            cleanUnrestrictSpinner();
+                            //Insert error box
+                            $('#unrestrictedZone').append('<div class="alert alert-error">An error occurred.</div>')
                         }
                     })
                 });
@@ -78,9 +101,9 @@
                         <input type="submit" class="btn btn-primary" value="Un-restrict">
                     </form>
                 </div>
-                <div class="span9">
+                <div class="span9" id="unrestrictedZone">
                     <label for="unrestrictedUrl">Unrestricted URL:</label>
-                    <a href="" id="unrestrictedUrl"></a>
+                    <div id="unrestrictedUrl"><a href=""></a></div>
                 </div>
             </div>
             <div class="row" style="padding-bottom: 20px;">
