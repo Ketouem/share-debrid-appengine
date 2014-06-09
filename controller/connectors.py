@@ -4,6 +4,7 @@ import urllib
 import hashlib
 import json
 from datetime import datetime
+import logging
 
 from controller.exceptions import NotConnectedError
 from model.File import File
@@ -79,7 +80,9 @@ class RealDebridServiceConnector(ServiceConnector):
         })
         url = self._endpoint + '/login.php?' + login_data
         result = urllib2.urlopen(url)
-        response = json.loads(result.read())
+        content = result.read()
+        logging.debug(content)
+        response = json.loads(content)
         self._auth_cookie = response["cookie"]
 
     def unlock_link(self, url):
@@ -95,6 +98,7 @@ class RealDebridServiceConnector(ServiceConnector):
             api_url = self._endpoint + '/unrestrict.php?link={}'.format(url)
             opener = urllib2.build_opener()
             opener.addheaders.append(('Cookie', self._auth_cookie))
+            logging.debug(opener.addheaders)
             result = opener.open(api_url)
             response = json.loads(result.read())
             f = File(source_url=url, unrestricted_url=response['main_link'], filename=response['file_name'],
