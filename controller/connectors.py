@@ -8,6 +8,7 @@ import logging
 
 from controller.exceptions import NotConnectedError
 from model.File import File
+from environment import USER_AGENT
 
 
 class ServiceConnector:
@@ -98,6 +99,7 @@ class RealDebridServiceConnector(ServiceConnector):
             api_url = self._endpoint + '/unrestrict.php?link={}'.format(url)
             opener = urllib2.build_opener()
             opener.addheaders.append(('Cookie', self._auth_cookie))
+            opener.addheaders.append(('User-agent', USER_AGENT))
             logging.debug(opener.addheaders)
             result = opener.open(api_url)
             response = json.loads(result.read())
