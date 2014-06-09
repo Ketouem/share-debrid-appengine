@@ -62,7 +62,7 @@ class RealDebridServiceConnector(ServiceConnector):
         _auth_cookie    The cookie 'auth=...' sent back by the login method
     """
 
-    _endpoint = "https://real-debrid.com/ajax"
+    _endpoint = "http://real-debrid.com/ajax"
 
     def __init__(self, user, password):
         ServiceConnector.__init__(self, user, password)
