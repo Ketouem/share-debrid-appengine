@@ -1,7 +1,6 @@
 import json
 
 from google.appengine.api import users
-from google.appengine.ext import db
 
 import webapp2
 
@@ -37,7 +36,7 @@ class Unrestrictor(webapp2.RedirectHandler):
         f.put()
         files = queries.get_files_for_user(user)
         if len(files) > FILE_STORE_LIMIT:
-            db.delete([files[-1]])
+            files[-1].key.delete()
         self.response.write(json.dumps(ret))
 
 
