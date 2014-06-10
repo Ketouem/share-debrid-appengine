@@ -67,20 +67,17 @@
                         success: function(data){
                             var parsed = $.parseJSON(data);
                             $("#historyUnrestricted .list-group-item").remove();
-                            $("#historySource .list-group-item").remove();
+                            $("#historySource").empty();
                             for(var i = 0; i < parsed.length; i++){
                                 var unrestrictedUrl = parsed[i]['unrestrictedUrl'];
                                 var sourceUrl = parsed[i]['sourceUrl'];
-                                $("#history .span12").prepend('<div class="navbar navbar-default" role="navigation">' +
-                                                      '<div class="navbar-inner">' +
-                                                      '<ul class="nav navbar-nav" id="historySource">' +
-                                                      '<li><a href="' + unrestrictedUrl + '">' +
-                                                      unrestrictedUrl + '</a></li>' +
-                                                      '<li><a href="' + sourceUrl + '">' +
-                                                      sourceUrl + '</a></li>' +
-                                                      '</ul>' +
-                                                      '</div>' +
-                                                      '</div>');
+                                $('#history .span12').prepend('<div class="alert alert-info">' +
+                                                              '<ul>' +
+                                                              '<li><a href="' + unrestrictedUrl + '">' +
+                                                              unrestrictedUrl + '</a></li>' +
+                                                              '<li><a href="' + sourceUrl + '">' +
+                                                              sourceUrl + '</a></li></ul>' +
+                                                              '</div>')
                             }
                         }
                     })
@@ -119,7 +116,7 @@
                 </div>
             </div>
             <div class="row" id="history">
-                <div class="span12">
+                <div class="span12" id="historySource">
                 </div>
             </div>
         </div>
