@@ -80,9 +80,12 @@ class RealDebridServiceConnector(ServiceConnector):
             'pass': hashlib.md5(self._password).hexdigest()
         })
         url = self._endpoint + '/login.php?' + login_data
-        result = urllib2.urlopen(url)
+        opener = urllib2.build_opener()
+        opener.addheaders.append(('User-agent', USER_AGENT))
+        logging.debug("Headers connect: " + str(opener.addheaders))
+        result = opener.open(url)
         content = result.read()
-        logging.debug(content)
+        logging.debug("Open Connection:" + content)
         response = json.loads(content)
         self._auth_cookie = response["cookie"]
 
@@ -96,11 +99,12 @@ class RealDebridServiceConnector(ServiceConnector):
         if self._auth_cookie is None:
             raise NotConnectedError('No auth cookie is available.')
         else:
-            api_url = self._endpoint + '/unrestrict.php?link={}'.format(url)
+            encoded = urllib.urlencode({'link': url})
+            api_url = self._endpoint + '/unrestrict.php?{}'.format(encoded)
             opener = urllib2.build_opener()
             opener.addheaders.append(('Cookie', self._auth_cookie))
             opener.addheaders.append(('User-agent', USER_AGENT))
-            logging.debug(opener.addheaders)
+            logging.debug("Headers unlock link: " + str(opener.addheaders))
             result = opener.open(api_url)
             response = json.loads(result.read())
             logging.debug(response)
