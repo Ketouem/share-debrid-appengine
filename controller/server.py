@@ -29,15 +29,18 @@ class Unrestrictor(webapp2.RedirectHandler):
         data = json.loads(data)
         c = RealDebridServiceConnector(**REAL_DEBRID_CREDENTIALS)
         f = c.unlock_link(data["url"])
-        ret = {
-            'unrestrictedUrl': f.unrestricted_url
-        }
-        f.user = user
-        f.put()
-        files = queries.get_files_for_user(user)
-        if len(files) > FILE_STORE_LIMIT:
-            files[-1].key.delete()
-        self.response.write(json.dumps(ret))
+        if not isinstance(f, dict):
+            ret = {
+                'unrestrictedUrl': f.unrestricted_url
+            }
+            f.user = user
+            f.put()
+            files = queries.get_files_for_user(user)
+            if len(files) > FILE_STORE_LIMIT:
+                files[-1].key.delete()
+        else:
+            self.response.set_status(500)
+        self.response.write(json.dumps(f))
 
 
 class Archiver(webapp2.RedirectHandler):

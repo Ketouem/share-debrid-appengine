@@ -81,6 +81,7 @@ class RealDebridServiceConnector(ServiceConnector):
         })
         url = self._endpoint + '/login.php?' + login_data
         opener = urllib2.build_opener()
+        opener.addheaders.pop()
         opener.addheaders.append(('User-agent', USER_AGENT))
         logging.debug("Headers connect: " + str(opener.addheaders))
         result = opener.open(url)
@@ -102,12 +103,15 @@ class RealDebridServiceConnector(ServiceConnector):
             encoded = urllib.urlencode({'link': url})
             api_url = self._endpoint + '/unrestrict.php?{}'.format(encoded)
             opener = urllib2.build_opener()
+            opener.addheaders.pop()
             opener.addheaders.append(('Cookie', self._auth_cookie))
             opener.addheaders.append(('User-agent', USER_AGENT))
             logging.debug("Headers unlock link: " + str(opener.addheaders))
             result = opener.open(api_url)
             response = json.loads(result.read())
             logging.debug(response)
+            if 'error' in response:
+                return {'errorMessage': response['message']}
             f = File(source_url=url, unrestricted_url=response['main_link'], filename=response['file_name'],
                      size=int(response['file_size_bytes']), file_locker=response['hoster_name'],
                      creation_date=datetime.utcnow())

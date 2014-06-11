@@ -49,11 +49,13 @@
                             anchorSuccess.text(parsed['unrestrictedUrl']);
                             $('#unrestrictedUrl').attr('class', 'alert alert-success');
                         },
-                        error: function(){
+                        error: function(xhr, status, error){
                             cleanUnrestrictSpinner();
                             cleanError();
+                            var parsed = $.parseJSON(xhr.responseText);
                             //Insert error box
-                            $('#unrestrictedZone').append('<div class="alert alert-error">An error occurred.</div>')
+                            $('#unrestrictedZone').append('<div class="alert alert-error">An error occurred: '
+                                    + parsed['errorMessage'] +'</div>')
                         }
                     })
                 });
