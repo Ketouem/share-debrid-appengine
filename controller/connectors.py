@@ -110,7 +110,8 @@ class RealDebridServiceConnector(ServiceConnector):
             result = opener.open(api_url)
             response = json.loads(result.read())
             logging.debug(response)
-            if 'error' in response:
+            error = response.get('error', 0)
+            if error > 0:
                 return {'errorMessage': response['message']}
             f = File(source_url=url, unrestricted_url=response['main_link'], filename=response['file_name'],
                      size=int(response['file_size_bytes']), file_locker=response['hoster_name'],
